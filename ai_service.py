@@ -1,30 +1,29 @@
-from openai import OpenAI
+from groq import Groq
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+client = Groq(
+    api_key=os.getenv("GROQ_API_KEY")
 )
-
 
 def predict_health(glucose, haemoglobin, cholesterol):
 
     try:
-        # OpenAI or Gemini call here
+
         prompt = f"""
-    Patient blood test values:
+Patient blood test values:
 
-    Glucose: {glucose}
-    Haemoglobin: {haemoglobin}
-    Cholesterol: {cholesterol}
+Glucose: {glucose}
+Haemoglobin: {haemoglobin}
+Cholesterol: {cholesterol}
 
-    Predict possible health risks in one short sentence.
-    """
+Predict possible health risks in 1-2 professional medical sentences.
+"""
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="llama-3.1-8b-instant",
             messages=[
                 {
                     "role": "user",
@@ -35,18 +34,6 @@ def predict_health(glucose, haemoglobin, cholesterol):
 
         return response.choices[0].message.content
 
-    except Exception:
+    except Exception as e:
 
-        if glucose > 140 and cholesterol > 240:
-            return "Possible diabetes and cardiovascular risk."
-
-        elif glucose > 140:
-            return "Possible diabetes risk."
-
-        elif cholesterol > 240:
-            return "Possible cardiovascular risk."
-
-        elif haemoglobin < 12:
-            return "Possible anemia risk."
-
-        return "Values appear within normal range."
+        return f"AI Service Error: {str(e)}"
