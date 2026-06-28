@@ -21,6 +21,25 @@ def create_table():
     conn.close()
 
 
+def patient_exists(full_name, dob, email):
+
+    conn = sqlite3.connect("patient.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT * FROM patients
+        WHERE full_name=? AND dob=? AND email=?
+        """,
+        (full_name, dob, email)
+    )
+
+    record = cursor.fetchone()
+
+    conn.close()
+
+    return record is not None
+
 def add_patient(
         full_name,
         dob,

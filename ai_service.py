@@ -36,4 +36,4 @@ Predict possible health risks in 1-2 professional medical sentences.
 
     except Exception as e:
 
-        return f"AI Service Error: {str(e)}"
+        return "Unable to generate AI health remarks at the moment."    #return f"AI Service Error: {str(e)}"

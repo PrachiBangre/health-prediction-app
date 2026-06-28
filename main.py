@@ -8,7 +8,8 @@ from database import (
     add_patient,
     get_patients,
     update_patient,
-    delete_patient
+    delete_patient,
+    patient_exists
     )
 
 
@@ -88,7 +89,14 @@ if st.button("Save"):
 
     if not valid:
         st.error(message)
-
+    
+    elif patient_exists(
+        full_name,
+        str(dob),
+        email
+    ):
+        st.error("Patient already exists.")
+        
     else:
 
         remarks = predict_health(
